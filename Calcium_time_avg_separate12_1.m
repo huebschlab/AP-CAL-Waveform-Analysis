@@ -799,7 +799,7 @@ while count <= total
         
         
     end % End of Try, Catch
-    clearvars -except delim files method num pathname total count
+    clearvars -except delim files method num pathname total count backorder backs backmeth
 end
 
 

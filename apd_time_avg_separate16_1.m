@@ -439,7 +439,7 @@ while count <= total
             scatter(time(closestIndex-1),averagepixel(closestIndex-1),'c*'); % First point of max dV/dt
             
             
-            clear tempdata5; clear averagetime5; clear dVdt; clear yy;
+            clear tempdata5; clear averagetime5; clear dVdt;
             
             % starting from the peak of the signal, loop until we reach value for APD90
             for k = maxiter:max(size(tempdata))
@@ -652,13 +652,13 @@ while count <= total
         set(gca, 'XTick', []); set(gca,'Ytick',[]);
         
         text(double(0.05*max(time(:))),avgMax,sprintf('AP Amp: %.0f +- %.0f RFU',avgMax, stdMax), 'FontSize', 8);
-        text(double(0.05*max(time(:))),0.85*avgMax,['APD_{30}:' num2str(avg30) ' \pm ' num2str(std30) 'ms'], 'FontSize', 8);
-        text(double(0.05*max(time(:))),0.7*avgMax,['APD_{80}:' num2str(avg80) ' \pm ' num2str(std80) 'ms'], 'FontSize', 8);
-        text(double(0.05*max(time(:))),0.55*avgMax,['APD_{90}:' num2str(avg90) ' \pm ' num2str(std80) 'ms'], 'FontSize', 8);
-        text(double(0.05*max(time(:))),0.4*avgMax,['UPD:' num2str(avgUp) ' \pm ' num2str(stdUp) 'ms'], 'FontSize', 8);
+        text(double(0.05*max(time(:))),0.85*avgMax,['APD_{30}:' num2str(coravg30) ' \pm ' num2str(corstd30) 'ms'], 'FontSize', 8);
+        text(double(0.05*max(time(:))),0.7*avgMax,['APD_{80}:' num2str(coravg80) ' \pm ' num2str(corstd80) 'ms'], 'FontSize', 8);
+        text(double(0.05*max(time(:))),0.55*avgMax,['APD_{90}:' num2str(coravg90) ' \pm ' num2str(corstd90) 'ms'], 'FontSize', 8);
+        text(double(0.05*max(time(:))),0.4*avgMax,['UPD:' num2str(coravgUp) ' \pm ' num2str(corstdUp) 'ms'], 'FontSize', 8);
         text(double(0.05*max(time(:))),0.25*avgMax,sprintf('Beat Rate: %.0f bpm',Beatrate), 'FontSize', 8);
         text(double(0.05*max(time(:))),.1*avgMax,['\DeltaF/F_{0}: ' num2str(DelF_F0)], 'FontSize', 8);
-        text(double(0.05*max(time(:))),-.05*avgMax,['dV/dt:' num2str(dV_dt) ' \pm ' num2str(std_dV_dt) 'RFU/s'], 'FontSize', 8);
+        text(double(0.05*max(time(:))),-.05*avgMax,['dV/dt:' num2str(dV_dt) ' \pm ' num2str(std_dV_dt) ' RFU/s'], 'FontSize', 8);
         
         count = count + 1;
         
@@ -794,7 +794,7 @@ while count <= total
         
 
     end % End of Try, Catch
-    clearvars -except delim files method num pathname total count
+    clearvars -except delim files method num pathname total count backorder backs backmeth
 end
 
 
