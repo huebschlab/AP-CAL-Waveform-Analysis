@@ -379,6 +379,7 @@ while count <= total
 
 
             %%Find dV/dt Max%%
+            if framerate * 5 > 100
             upstarting = keepmin(i);
             upending = keepmax(i);
 
@@ -400,7 +401,7 @@ while count <= total
 
 
             r = 5; %artifically upsample to 5x actual sampling frequency for linear interpolation
-            if framerate * r > 100
+            
 
             %Interpolate Data to find more accurate location of dV/dt max
             tempdata5 = interp(upstrokeonly_amp,r);
@@ -444,6 +445,7 @@ while count <= total
 
             else
                 dVdtmax(i) = nan;
+                disp('Framerate too slow to capture dV/dt max')
             end
 
             % starting from the peak of the signal, loop until we reach value for APD90
