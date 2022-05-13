@@ -380,68 +380,68 @@ while count <= total
 
             %%Find dV/dt Max%%
             if framerate * 5 > 100
-            upstarting = keepmin(i);
-            upending = keepmax(i);
+                upstarting = keepmin(i);
+                upending = keepmax(i);
 
-            if upending-upstarting < 8 % interp function requires 9 or more points
-                upstarting = upstarting - (8-(upending-upstarting));
-            end
+                if upending-upstarting < 8 % interp function requires 9 or more points
+                    upstarting = upstarting - (8-(upending-upstarting));
+                end
 
-            %Check if 9 or more points are included and expand end of
-            %window if more points neeeded
-            shortChopFlag = 0;
-            if upstarting <= 0
-                upstarting = 1;
-                upending = 9;
-                shortChopFlag = 1;
-            end
+                %Check if 9 or more points are included and expand end of
+                %window if more points neeeded
+                shortChopFlag = 0;
+                if upstarting <= 0
+                    upstarting = 1;
+                    upending = 9;
+                    shortChopFlag = 1;
+                end
 
-            upstrokeonly_t = time(upstarting:upending) ; upstrokeonly_t = upstrokeonly_t';
-            upstrokeonly_amp = averagepixel(upstarting:upending);
-
-
-            r = 5; %artifically upsample to 5x actual sampling frequency for linear interpolation
-            
-
-            %Interpolate Data to find more accurate location of dV/dt max
-            tempdata5 = interp(upstrokeonly_amp,r);
-            averagetime5 = interp(upstrokeonly_t,r);  averagetime5 =  averagetime5';
-
-            % Find time closest to start and peak if points added to allow
-            % 9 points for interpolation and remove points from expanded
-            % window
-            if shortChopFlag == 1
-                [~,upstrokeonly_start] = min(abs(sqrt((tempdata5-upstrokeonly_amp(keepmin(i))).^2+(averagetime5-upstrokeonly_t(keepmin(i))).^2)));
-                [~,upstrokeonly_end] = min(abs(sqrt((tempdata5-upstrokeonly_amp(keepmax(i))).^2+(averagetime5-upstrokeonly_t(keepmax(i))).^2)));
-                tempdata5 = tempdata5(upstrokeonly_start:upstrokeonly_end);
-                averagetime5 = averagetime5(upstrokeonly_start:upstrokeonly_end);
-            end
-
-            timeincrement = (upstrokeonly_t(2) - upstrokeonly_t(1))/r; %Set new timeinterval based on upsampling of interpolated data
+                upstrokeonly_t = time(upstarting:upending) ; upstrokeonly_t = upstrokeonly_t';
+                upstrokeonly_amp = averagepixel(upstarting:upending);
 
 
-            %Low Pass Filter
-            n = 4; % Filter order
-            Fs = framerate * r; % Sampling frequency from above
-            Fc = 50;
-            [bLow, aLow] = butter(n, Fc / (Fs/2)); % Creates a low pass Butterworth filter
-            tempdata5 = filter(bLow,aLow,tempdata5);
-
-            dVdt = diff(tempdata5);  % dV/dt of all data
-            [dVdtmax(i),~] = max(dVdt(:)); % value of maximum dV/dt of data
-
-            maxt = dVdt == dVdtmax(i); % Find index of max dV/dt within all dV/dt
-            maxtime = averagetime5(maxt) ; % Find time of dV/dt max within single AP
-            dVdtmax(i) = dVdtmax(i) ./ timeincrement; % Scale dV/dt based on upsampling
-            [~, closestIndex] = min(abs(time-maxtime)); % Find time index of specific AP dV/dt max within entire trace
+                r = 5; %artifically upsample to 5x actual sampling frequency for linear interpolation
 
 
-            % Plot end points that define max dV/dt
-            subplot(3,2,(3:4)); hold on;
-            scatter(time(closestIndex),averagepixel(closestIndex),'c'); % Last point of max dV/dt
-            scatter(time(closestIndex-1),averagepixel(closestIndex-1),'c*'); % First point of max dV/dt
+                %Interpolate Data to find more accurate location of dV/dt max
+                tempdata5 = interp(upstrokeonly_amp,r);
+                averagetime5 = interp(upstrokeonly_t,r);  averagetime5 =  averagetime5';
 
-            clear tempdata5; clear averagetime5; clear dVdt;
+                % Find time closest to start and peak if points added to allow
+                % 9 points for interpolation and remove points from expanded
+                % window
+                if shortChopFlag == 1
+                    [~,upstrokeonly_start] = min(abs(sqrt((tempdata5-upstrokeonly_amp(keepmin(i))).^2+(averagetime5-upstrokeonly_t(keepmin(i))).^2)));
+                    [~,upstrokeonly_end] = min(abs(sqrt((tempdata5-upstrokeonly_amp(keepmax(i))).^2+(averagetime5-upstrokeonly_t(keepmax(i))).^2)));
+                    tempdata5 = tempdata5(upstrokeonly_start:upstrokeonly_end);
+                    averagetime5 = averagetime5(upstrokeonly_start:upstrokeonly_end);
+                end
+
+                timeincrement = (upstrokeonly_t(2) - upstrokeonly_t(1))/r; %Set new timeinterval based on upsampling of interpolated data
+
+
+                %Low Pass Filter
+                n = 4; % Filter order
+                Fs = framerate * r; % Sampling frequency from above
+                Fc = 50;
+                [bLow, aLow] = butter(n, Fc / (Fs/2)); % Creates a low pass Butterworth filter
+                tempdata5 = filter(bLow,aLow,tempdata5);
+
+                dVdt = diff(tempdata5);  % dV/dt of all data
+                [dVdtmax(i),~] = max(dVdt(:)); % value of maximum dV/dt of data
+
+                maxt = dVdt == dVdtmax(i); % Find index of max dV/dt within all dV/dt
+                maxtime = averagetime5(maxt) ; % Find time of dV/dt max within single AP
+                dVdtmax(i) = dVdtmax(i) ./ timeincrement; % Scale dV/dt based on upsampling
+                [~, closestIndex] = min(abs(time-maxtime)); % Find time index of specific AP dV/dt max within entire trace
+
+
+                % Plot end points that define max dV/dt
+                subplot(3,2,(3:4)); hold on;
+                scatter(time(closestIndex),averagepixel(closestIndex),'c'); % Last point of max dV/dt
+                scatter(time(closestIndex-1),averagepixel(closestIndex-1),'c*'); % First point of max dV/dt
+
+                clear tempdata5; clear averagetime5; clear dVdt;
 
             else
                 dVdtmax(i) = nan;
