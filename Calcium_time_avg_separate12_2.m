@@ -443,6 +443,7 @@ while count <= total
                 clear tempdata5; clear averagetime5; clear dVdt; clear yy;
             else
                 dCadtmax(i) = nan;
+                disp('Framerate too slow to capture dCa/dt max')
             end
 
 
