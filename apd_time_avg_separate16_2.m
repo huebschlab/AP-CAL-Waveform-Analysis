@@ -928,9 +928,5 @@ end
 
 % QT correction function
 function [corrected_data] = corr(variable_data, RR)
-%corrected_data = round(variable_data ./ RR .^ (1/3)); % Fredericia
-%corrected_data = round(variable_data ./ RR .^ (1/2)); % Bazett
-%corrected_data = round(1000*((variable_data/1000) + (0.154*(1-RR)))); % Sagie/Farmingham
-corrected_data = round(variable_data ./ RR .^ (0.22)); % https://www.sciencedirect.com/science/article/pii/S1347861317301251
-
+    corrected_data = round(variable_data ./ RR .^ (1/3)); % Fredericia
 end
