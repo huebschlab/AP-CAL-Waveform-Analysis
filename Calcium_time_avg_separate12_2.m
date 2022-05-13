@@ -375,29 +375,30 @@ while count <= total
 
 
             %Find dCa/dt Max
-            upstarting = keepmin(i);
-            upending = keepmax(i);
+            if framerate * 5 > 100
+                upstarting = keepmin(i);
+                upending = keepmax(i);
 
-            if upending-upstarting < 8 % interp function requires 9 or more points
-                upstarting = upstarting - (8-(upending-upstarting));
-            end
+                if upending-upstarting < 8 % interp function requires 9 or more points
+                    upstarting = upstarting - (8-(upending-upstarting));
+                end
 
-            %Check if 9 or more points are included and expand end of
-            %window if more points neeeded
-            shortChopFlag = 0;
-            if upstarting <= 0
-                upstarting = 1;
-                upending = 9;
-                shortChopFlag = 1;
-            end
+                %Check if 9 or more points are included and expand end of
+                %window if more points neeeded
+                shortChopFlag = 0;
+                if upstarting <= 0
+                    upstarting = 1;
+                    upending = 9;
+                    shortChopFlag = 1;
+                end
 
-            upstrokeonly_t = time(upstarting:upending) ; upstrokeonly_t = upstrokeonly_t';
-            upstrokeonly_amp = averagepixel(upstarting:upending);
+                upstrokeonly_t = time(upstarting:upending) ; upstrokeonly_t = upstrokeonly_t';
+                upstrokeonly_amp = averagepixel(upstarting:upending);
 
 
-            r = 5; %artifically upsample to 5x actual sampling frequency for linear interpolation
+                r = 5; %artifically upsample to 5x actual sampling frequency for linear interpolation
 
-            if framerate * r > 100
+            
 
 
                 %Interpolate Data to find more accurate location of dCa/dt max
