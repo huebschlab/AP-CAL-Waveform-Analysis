@@ -1,4 +1,4 @@
-function Calcium_time_avg_separate12_2(method,num,backorder,backs,backmeth)
+function Calcium_time_avg_separate12_3(method,num,backorder,backs,backmeth)
 %Default function call:     Calcium_time_avg_separate11_1('amp',5)
 % possible method inputs: deriv(does derivative method)
 % amp (does % of amplitude method)
@@ -398,7 +398,7 @@ while count <= total
 
                 r = 5; %artifically upsample to 5x actual sampling frequency for linear interpolation
 
-            
+
 
 
                 %Interpolate Data to find more accurate location of dCa/dt max
@@ -674,7 +674,7 @@ while count <= total
         save([dirname delim filenamemethnum '_correctedtrace.mat'],'averagepixel','time');
 
         % Save CAL Data
-        save([dirname delim filenamemethnum '_APD_Data.mat'],'avgMax','stdMax', 'Beatrate', 'avg75',...
+        save([dirname delim filenamemethnum '_CAL_Data.mat'],'avgMax','stdMax', 'Beatrate', 'avg75',...
             'std75', 'avg50', 'std50','avg30','std30','avgUp','stdUp',...
             'avgwaveint', 'stdwaveint','avgSize','stdSize','DelF_F0','F0',...
             'dCa_dt','std_dCa_dt','peakDuration','std_peakDuration','coravg75',...
