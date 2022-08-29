@@ -1,4 +1,4 @@
-function cmosData = CMOSconverter10_Auto(fdim1,fdim2,sigma,ngauss,scale,upperframelimit,inputfreq,drawbounds)
+function cmosData = CMOSconverter10_1_Auto(fdim1,fdim2,sigma,ngauss,scale,upperframelimit,inputfreq,drawbounds)
 
 %If code throws an error when correct input variables are used, please run
 %the "setJavaPath.m" code using the instructions in that script
@@ -7,7 +7,7 @@ function cmosData = CMOSconverter10_Auto(fdim1,fdim2,sigma,ngauss,scale,upperfra
 % input framerate, set inputfreq to integer value of framerate
 
 
-%cmosData = CMOSconverter9_Auto(3,3,0.5,2,1,5e3,'auto',0);
+%cmosData = CMOSconverter10_1_Auto(3,3,0.5,2,1,5e3,'auto',0);
 
 
 warning off
@@ -140,7 +140,7 @@ while count <= total
 
         maxcount = min(PlaneCount,upperframelimit);
 
-        imageslice = int32((bfGetPlane(reader,1)));
+        testslice = int32((bfGetPlane(reader,1)));
         %   imageslice = imrotate(imageslice,90,'bilinear','crop');
         %cmosData(:,:,jj) = imageslice;
 
@@ -148,21 +148,21 @@ while count <= total
 
 
 
-        imageslice2 = imageslice; %medfilt2(imageslice,[fdim1 fdim1]);
+        testslice2 = testslice; %medfilt2(imageslice,[fdim1 fdim1]);
 
         h = fspecial('gaussian',fdim2,sigma);
         %     imageslice2 = imfilter(imageslice2,h);
         %     %imageslice2 = imgaussfilt(imageslice2,fdim2); %Median filter with a fdim x fdim box; gaussian filter with a
         %     %standard deviation of 2
-        imageslice2 = imresize(imageslice2,scale);
-        [m,n] = size(imageslice2);
+        testslice2 = imresize(testslice2,scale);
+        [m,n] = size(testslice2);
         cmosData = int32(zeros(m,n,maxcount));
 
         if drawbounds
 
             ChooseFigure = figure;
             set(gcf,'numbertitle','off','name','Choose Area of Interest');
-            imagesc(imageslice2), colormap(gray)
+            imagesc(testslice2), colormap(gray)
             axis image
             set(gca, 'YTick', []);
             set(gca, 'XTick', []);
@@ -189,6 +189,7 @@ while count <= total
                     imageslice = int32((bfGetPlane(reader,jj))); %squeeze(tiffStackOriginal(:,:,i));
                     %   imageslice = imrotate(imageslice,90,'bilinear','crop');
                     %cmosData(:,:,jj) = imageslice;
+                    imageslice = imresize(imageslice,scale);
                     imageslice2 = medfilt2(imageslice,[fdim1 fdim1]);
 
                     for ii = 1:ngauss
@@ -247,6 +248,7 @@ while count <= total
                     imageslice = int32((bfGetPlane(reader,jj))); %squeeze(tiffStackOriginal(:,:,i));
                     %   imageslice = imrotate(imageslice,90,'bilinear','crop');
                     %cmosData(:,:,jj) = imageslice;
+                    imageslice = imresize(imageslice,scale);
                     imageslice2 = medfilt2(imageslice,[fdim1 fdim1]);
                     for ii = 1:ngauss
                         imageslice2 = imfilter(imageslice2,h);
@@ -294,6 +296,7 @@ while count <= total
                 imageslice = int32((bfGetPlane(reader,jj))); %squeeze(tiffStackOriginal(:,:,i));
                 %   imageslice = imrotate(imageslice,90,'bilinear','crop');
                 %cmosData(:,:,jj) = imageslice;
+                imageslice = imresize(imageslice,scale);
                 imageslice2 = medfilt2(imageslice,[fdim1 fdim1]);
                 for ii = 1:ngauss
                     imageslice2 = imfilter(imageslice2,h);
