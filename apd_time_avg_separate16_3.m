@@ -1,4 +1,4 @@
-function apd_time_avg_separate16_2(method,num,backorder,backs,backmeth)
+function apd_time_avg_separate16_3(method,num,backorder,backs,backmeth)
 %Default function call:     apd_time_avg_separate16_1('amp',20)
 %   background = backcor(time,averagepixel,backorder,backs,backmeth);
 
@@ -446,6 +446,7 @@ while count <= total
             else
                 dVdtmax(i) = nan;
                 disp('Framerate too slow to capture dV/dt max')
+
             end
 
             % starting from the peak of the signal, loop until we reach value for APD90
@@ -711,7 +712,7 @@ while count <= total
 
         fprintf('Calculated Upstroke Duration: %.2f +- %.2f ms\n',avgUp,stdUp);
         fprintf('Calculated APD90: %.2f +- %.2f ms\n',avg90,std90);
-    toc
+        toc
 
 
         %% Catch
